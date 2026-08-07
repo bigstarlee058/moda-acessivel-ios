@@ -36,7 +36,7 @@ jobs:
         run: |
           cat <<EOF > ExportOptions.plist
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.plist">
           <plist version="1.0">
           <dict>
               <key>method</key>
@@ -55,6 +55,14 @@ jobs:
           pod repo update
           pod install --repo-update
 
+      - name: Criar Configuração de Assinatura Sem Afetar Pods
+        run: |
+          cat <<EOF > AppSigning.xcconfig
+          CODE_SIGN_IDENTITY = Apple Distribution
+          CODE_SIGN_STYLE = Automatic
+          DEVELOPMENT_TEAM = W5399G3VHK
+          EOF
+
       - name: Compilar e Gerar Archive
         run: |
           xcodebuild archive \
@@ -63,12 +71,7 @@ jobs:
                      -destination "generic/platform=iOS" \
                      -configuration Release \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
-                     DEVELOPMENT_TEAM=W5399G3VHK \
-                     CODE_SIGN_STYLE=Automatic \
-                     CODE_SIGN_IDENTITY="Apple Distribution" \
-                     EXPANDED_CODE_SIGN_IDENTITY="" \
-                     CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=YES \
+                     -xcconfig AppSigning.xcconfig \
                      -allowProvisioningUpdates \
                      -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
