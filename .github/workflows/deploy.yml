@@ -19,18 +19,28 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
-      - name: Instalar chave API do App Store Connect
+      - name: Instalar Chave API do App Store Connect
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Criar Keychain Temporária
+      - name: Configurar Keychain e Instalar Certificado/Perfil
         run: |
+          # Criar keychain temporária
           KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
           security create-keychain -p "" $KEYCHAIN_PATH
           security set-keychain-settings -lut 3600 $KEYCHAIN_PATH
           security unlock-keychain -p "" $KEYCHAIN_PATH
           security default-keychain -s $KEYCHAIN_PATH
+
+          # Importar o certificado P12
+          echo "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" | base64 --decode > certificate.p12
+          security import certificate.p12 -k $KEYCHAIN_PATH -P "${{ secrets.P12_PASSWORD }}" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" $KEYCHAIN_PATH
+
+          # Instalar o Provisioning Profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
 
       - name: Ajustar Podfile e Desativar Assinatura dos Pods
         run: |
@@ -39,7 +49,6 @@ jobs:
           with open(path, 'r') as f:
               content = f.read()
           
-          # Remove qualquer post_install antigo para evitar duplicacao
           if 'post_install do |installer|' in content:
               content = content.split('post_install do |installer|')[0]
           
@@ -76,10 +85,13 @@ jobs:
               <key>destination</key>
               <string>upload</string>
               <key>signingStyle</key>
-              <string>automatic</string>
+              <string>manual</string>
+              <key>signingCertificate</key>
+              <string>Apple Distribution</string>
               <key>teamID</key>
               <string>W5399G3VHK</string>
           </dict>
+          </plist>
           EOF
 
       - name: Compilar e Gerar Archive
@@ -90,22 +102,15 @@ jobs:
                      -destination "generic/platform=iOS" \
                      -configuration Release \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
-                     DEVELOPMENT_TEAM=W5399G3VHK \
-                     -allowProvisioningUpdates \
-                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
-                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
-                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+                     CODE_SIGN_STYLE=Manual \
+                     DEVELOPMENT_TEAM=W5399G3VHK
 
       - name: Exportar e Assinar IPA para App Store
         run: |
           xcodebuild -exportArchive \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
                      -exportOptionsPlist ExportOptions.plist \
-                     -exportPath $PWD/build/out \
-                     -allowProvisioningUpdates \
-                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
-                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
-                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+                     -exportPath $PWD/build/out
 
       - name: Upload para App Store Connect
         run: |
