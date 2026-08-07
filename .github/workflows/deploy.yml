@@ -47,6 +47,14 @@ jobs:
           pod repo update
           pod install --repo-update
 
+      - name: Compilar Pods Separadamente
+        run: |
+          xcodebuild build \
+                     -workspace "Moda Acessível.xcworkspace" \
+                     -scheme "Pods-Moda Acessível" \
+                     -sdk iphoneos \
+                     -configuration Release
+
       - name: Compilar e Gerar Archive
         run: |
           xcodebuild archive \
@@ -58,7 +66,8 @@ jobs:
                      DEVELOPMENT_TEAM=W5399G3VHK \
                      CODE_SIGN_STYLE=Automatic \
                      CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=NO
+                     CODE_SIGNING_ALLOWED=NO \
+                     ONLY_ACTIVE_ARCH=NO
 
       - name: Exportar e Assinar IPA para App Store
         run: |
