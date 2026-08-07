@@ -42,19 +42,19 @@ jobs:
           </dict>
           EOF
 
-      - name: Instalar CocoaPods
+      - name: Instalar Dependencias CocoaPods
         run: |
-          if [ -f "Podfile" ]; then
-            pod install
-          fi
+          pod repo update
+          pod install --repo-update
 
-      - name: Compilar e Gerar Archive (Sem checagem de dispositivo)
+      - name: Compilar e Gerar Archive
         run: |
-          xcodebuild -workspace "Moda Acessível.xcworkspace" \
+          xcodebuild archive \
+                     -workspace "Moda Acessível.xcworkspace" \
                      -scheme "Moda Acessível" \
                      -sdk iphoneos \
                      -configuration Release \
-                     -archivePath $PWD/build/ModaAcessivel.xcarchive archive \
+                     -archivePath $PWD/build/ModaAcessivel.xcarchive \
                      DEVELOPMENT_TEAM=W5399G3VHK \
                      CODE_SIGN_STYLE=Automatic \
                      CODE_SIGNING_REQUIRED=NO \
