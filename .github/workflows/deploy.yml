@@ -24,6 +24,14 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
+      - name: Criar Keychain Temporaria para Assinatura
+        run: |
+          KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
+          security create-keychain -p "" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 3600 $KEYCHAIN_PATH
+          security unlock-keychain -p "" $KEYCHAIN_PATH
+          security default-keychain -s $KEYCHAIN_PATH
+
       - name: Criar ExportOptions.plist
         run: |
           cat <<EOF > ExportOptions.plist
@@ -47,14 +55,6 @@ jobs:
           pod repo update
           pod install --repo-update
 
-      - name: Compilar Pods Separadamente
-        run: |
-          xcodebuild build \
-                     -workspace "Moda Acessível.xcworkspace" \
-                     -scheme "Pods-Moda Acessível" \
-                     -sdk iphoneos \
-                     -configuration Release
-
       - name: Compilar e Gerar Archive
         run: |
           xcodebuild archive \
@@ -65,9 +65,10 @@ jobs:
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
                      DEVELOPMENT_TEAM=W5399G3VHK \
                      CODE_SIGN_STYLE=Automatic \
-                     CODE_SIGNING_REQUIRED=NO \
-                     CODE_SIGNING_ALLOWED=NO \
-                     ONLY_ACTIVE_ARCH=NO
+                     -allowProvisioningUpdates \
+                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
+                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
+                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
       - name: Exportar e Assinar IPA para App Store
         run: |
