@@ -2,7 +2,7 @@
         run: |
           KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
           security create-keychain -p "" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 3600 $KEYCHAIN_PATH
+          security set-key-settings -lut 3600 $KEYCHAIN_PATH
           security unlock-keychain -p "" $KEYCHAIN_PATH
           security default-keychain -s $KEYCHAIN_PATH
           echo "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" | tr -d '\n' | base64 --decode > certificate.p12
