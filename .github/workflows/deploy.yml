@@ -1,2 +1,12 @@
 - name: Configurar Keychain e Instalar Certificado/Perfil
-        run: KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db && security create-keychain -p "" $KEYCHAIN_PATH && security set-keychain-settings -lut 3600 $KEYCHAIN_PATH && security unlock-keychain -p "" $KEYCHAIN_PATH && security default-keychain -s $KEYCHAIN_PATH && echo "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" | tr -d '\n' | base64 --decode > certificate.p12 && security import certificate.p12 -k $KEYCHAIN_PATH -P "${{ secrets.P12_PASSWORD }}" -A && security set-key-partition-list -S apple-tool:,apple: -s -k "" $KEYCHAIN_PATH && mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && echo "${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}" | tr -d '\n' | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+        run: |
+          KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
+          security create-keychain -p "" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 3600 $KEYCHAIN_PATH
+          security unlock-keychain -p "" $KEYCHAIN_PATH
+          security default-keychain -s $KEYCHAIN_PATH
+          echo "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" | tr -d '\n' | base64 --decode > certificate.p12
+          security import certificate.p12 -k $KEYCHAIN_PATH -P "${{ secrets.P12_PASSWORD }}" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" $KEYCHAIN_PATH
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}" | tr -d '\n' | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
