@@ -24,7 +24,24 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Instalar CocoaPods (se houver)
+      - name: Criar ExportOptions.plist
+        run: |
+          cat <<EOF > ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key>
+              <string>app-store</string>
+              <key>destination</key>
+              <string>upload</string>
+              <key>signingStyle</key>
+              <string>automatic</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Instalar CocoaPods
         run: |
           if [ -f "Podfile" ]; then
             pod install
@@ -37,6 +54,7 @@ jobs:
                      -sdk iphoneos \
                      -configuration Release \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive archive \
+                     DEVELOPMENT_TEAM=W5399G3VHK \
                      ALLOW_PROVISIONING_AUTO_APPROVED=YES
 
           xcodebuild -exportArchive \
@@ -47,9 +65,3 @@ jobs:
                      -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
                      -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
-
-          xcrun altool --upload-app \
-                       --type ios \
-                       --file $PWD/build/out/*.ipa \
-                       --apiKey ${{ secrets.APP_STORE_KEY_ID }} \
-                       --apiIssuer ${{ secrets.APP_STORE_ISSUER_ID }}
