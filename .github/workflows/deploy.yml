@@ -24,60 +24,52 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Configurar Assinatura Automática por API (App Store Connect)
-        uses: apple-actions/import-codesign-certs@v3
-        with:
-          p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
-          p12-password: ${{ secrets.P12_PASSWORD }}
-
-      - name: Ajustar Podfile e Desativar Assinatura dos Pods
-        run: |
-          python3 -c "
-          path = 'Podfile'
-          with open(path, 'r') as f:
-              content = f.read()
-          if 'post_install do |installer|' in content:
-              content = content.split('post_install do |installer|')[0]
-          new_post_install = '''
-          post_install do |installer|
-            installer.pods_project.targets.each do |target|
-              target.build_configurations.each do |config|
-                config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-                config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
-                config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ''
-              end
-            end
-          end
-          '''
-          with open(path, 'w') as f:
-              f.write(content + '\n' + new_post_install)
-          "
-
       - name: Instalar Dependências CocoaPods
         run: |
-          pod repo update
-          pod install --repo-update
+          pod install
 
-      - name: Compilar, Gerar Archive e Enviar para App Store
+      - name: Compilar e Gerar Archive
         run: |
-          xcodebuild -workspace "Moda Acessível.xcworkspace" \
-                     -scheme "Moda Acessível" \
-                     -destination "generic/platform=iOS" \
-                     -configuration Release \
-                     archive \
-                     -archivePath $PWD/build/ModaAcessivel.xcarchive \
-                     -allowProvisioningUpdates \
-                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
-                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
-                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          xcodebuild archive \
+            -workspace "Moda Acessível.xcworkspace" \
+            -scheme "Moda Acessível" \
+            -destination "generic/platform=iOS" \
+            -archivePath build/ModaAcessivel.xcarchive \
+            -allowProvisioningUpdates \
+            -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
+            -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Exportar e Fazer Upload para o TestFlight / App Store
+      - name: Exportar IPA
         run: |
+          cat <<EOF > ExportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>W5399G3VHK</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+          </dict>
+          </plist>
+          EOF
+          
           xcodebuild -exportArchive \
-                     -archivePath $PWD/build/ModaAcessivel.xcarchive \
-                     -exportPath $PWD/build/out \
-                     -exportOptionsPlist ExportOptions.plist \
-                     -allowProvisioningUpdates \
-                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
-                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
-                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+            -archivePath build/ModaAcessivel.xcarchive \
+            -exportPath build/out \
+            -exportOptionsPlist ExportOptions.plist \
+            -allowProvisioningUpdates \
+            -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
+            -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
+            -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+      - name: Upload para App Store Connect
+        run: |
+          xcrun altool --upload-app \
+            --type ios \
+            --file build/out/*.ipa \
+            --apiKey ${{ secrets.APP_STORE_KEY_ID }} \
+            --apiIssuer ${{ secrets.APP_STORE_ISSUER_ID }}
