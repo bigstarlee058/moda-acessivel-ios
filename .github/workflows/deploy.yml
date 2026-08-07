@@ -36,7 +36,7 @@ jobs:
         run: |
           cat <<EOF > ExportOptions.plist
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.plist">
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
               <key>method</key>
@@ -50,20 +50,8 @@ jobs:
           </dict>
           EOF
 
-      - name: Configurar Podfile e Instalar Dependências
+      - name: Instalar Dependências CocoaPods
         run: |
-          cat << 'EOF' >> Podfile
-
-          post_install do |installer|
-            installer.pods_project.targets.each do |target|
-              target.build_configurations.each do |config|
-                config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
-                config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
-                config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
-              end
-            end
-          end
-          EOF
           pod repo update
           pod install --repo-update
 
@@ -78,6 +66,9 @@ jobs:
                      DEVELOPMENT_TEAM=W5399G3VHK \
                      CODE_SIGN_STYLE=Automatic \
                      CODE_SIGN_IDENTITY="Apple Distribution" \
+                     EXPANDED_CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=YES \
                      -allowProvisioningUpdates \
                      -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
