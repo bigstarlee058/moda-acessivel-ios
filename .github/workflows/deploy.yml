@@ -37,6 +37,7 @@ jobs:
             -archivePath build/ModaAcessivel.xcarchive \
             CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=W5399G3VHK \
+            PROVISIONING_PROFILE_SPECIFIER="" \
             -allowProvisioningUpdates \
             -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
             -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
@@ -55,6 +56,8 @@ jobs:
             <string>W5399G3VHK</string>
             <key>signingStyle</key>
             <string>automatic</string>
+            <key>destination</key>
+            <string>upload</string>
           </dict>
           </plist>
           EOF
