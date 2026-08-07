@@ -32,11 +32,43 @@ jobs:
           security unlock-keychain -p "" $KEYCHAIN_PATH
           security default-keychain -s $KEYCHAIN_PATH
 
+      - name: Ajustar Podfile e Desativar Assinatura dos Pods
+        run: |
+          python3 -c "
+          path = 'Podfile'
+          with open(path, 'r') as f:
+              content = f.read()
+          
+          # Remove qualquer post_install antigo para evitar duplicacao
+          if 'post_install do |installer|' in content:
+              content = content.split('post_install do |installer|')[0]
+          
+          new_post_install = '''
+          post_install do |installer|
+            installer.pods_project.targets.each do |target|
+              target.build_configurations.each do |config|
+                config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+                config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
+                config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ''
+              end
+            end
+          end
+          '''
+          
+          with open(path, 'w') as f:
+              f.write(content + '\n' + new_post_install)
+          "
+
+      - name: Instalar Dependências CocoaPods
+        run: |
+          pod repo update
+          pod install --repo-update
+
       - name: Criar ExportOptions.plist
         run: |
           cat <<EOF > ExportOptions.plist
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.plist">
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
           <dict>
               <key>method</key>
@@ -50,19 +82,6 @@ jobs:
           </dict>
           EOF
 
-      - name: Instalar Dependências CocoaPods
-        run: |
-          pod repo update
-          pod install --repo-update
-
-      - name: Criar Configuração de Assinatura Sem Afetar Pods
-        run: |
-          cat <<EOF > AppSigning.xcconfig
-          CODE_SIGN_IDENTITY = Apple Distribution
-          CODE_SIGN_STYLE = Automatic
-          DEVELOPMENT_TEAM = W5399G3VHK
-          EOF
-
       - name: Compilar e Gerar Archive
         run: |
           xcodebuild archive \
@@ -71,7 +90,7 @@ jobs:
                      -destination "generic/platform=iOS" \
                      -configuration Release \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
-                     -xcconfig AppSigning.xcconfig \
+                     DEVELOPMENT_TEAM=W5399G3VHK \
                      -allowProvisioningUpdates \
                      -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
