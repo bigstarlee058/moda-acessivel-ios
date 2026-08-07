@@ -37,8 +37,9 @@ jobs:
               <string>upload</string>
               <key>signingStyle</key>
               <string>automatic</string>
+              <key>teamID</key>
+              <string>W5399G3VHK</string>
           </dict>
-          </plist>
           EOF
 
       - name: Instalar CocoaPods
@@ -47,7 +48,7 @@ jobs:
             pod install
           fi
 
-      - name: Compilar e Enviar para App Store Connect
+      - name: Compilar e Gerar Archive (Sem checagem de dispositivo)
         run: |
           xcodebuild -workspace "Moda Acessível.xcworkspace" \
                      -scheme "Moda Acessível" \
@@ -55,12 +56,12 @@ jobs:
                      -configuration Release \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive archive \
                      DEVELOPMENT_TEAM=W5399G3VHK \
-                     -allowProvisioningUpdates \
-                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
-                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
-                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 \
-                     ALLOW_PROVISIONING_AUTO_APPROVED=YES
+                     CODE_SIGN_STYLE=Automatic \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=NO
 
+      - name: Exportar e Assinar IPA para App Store
+        run: |
           xcodebuild -exportArchive \
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
                      -exportOptionsPlist ExportOptions.plist \
@@ -70,6 +71,8 @@ jobs:
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
                      -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
+      - name: Upload para App Store Connect
+        run: |
           xcrun altool --upload-app \
                        --type ios \
                        --file $PWD/build/out/*.ipa \
