@@ -1,0 +1,55 @@
+name: Build e Deploy iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v4
+
+      - name: Configurar versao do Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
+      - name: Instalar chave API do App Store Connect
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+      - name: Instalar CocoaPods (se houver)
+        run: |
+          if [ -f "Podfile" ]; then
+            pod install
+          fi
+
+      - name: Compilar e Enviar para App Store Connect
+        run: |
+          xcodebuild -workspace "Moda Acessível.xcworkspace" \
+                     -scheme "Moda Acessível" \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     -archivePath $PWD/build/ModaAcessivel.xcarchive archive \
+                     ALLOW_PROVISIONING_AUTO_APPROVED=YES
+
+          xcodebuild -exportArchive \
+                     -archivePath $PWD/build/ModaAcessivel.xcarchive \
+                     -exportOptionsPlist ExportOptions.plist \
+                     -exportPath $PWD/build/out \
+                     -allowProvisioningUpdates \
+                     -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
+                     -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
+                     -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+          xcrun altool --upload-app \
+                       --type ios \
+                       --file $PWD/build/out/*.ipa \
+                       --apiKey ${{ secrets.APP_STORE_KEY_ID }} \
+                       --apiIssuer ${{ secrets.APP_STORE_ISSUER_ID }}
