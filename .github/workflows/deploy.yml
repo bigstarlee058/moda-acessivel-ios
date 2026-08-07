@@ -35,6 +35,8 @@ jobs:
             -scheme "Moda Acessível" \
             -destination "generic/platform=iOS" \
             -archivePath build/ModaAcessivel.xcarchive \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM=W5399G3VHK \
             -allowProvisioningUpdates \
             -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
             -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
