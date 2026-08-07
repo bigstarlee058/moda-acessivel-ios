@@ -24,7 +24,7 @@ jobs:
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
 
-      - name: Criar Keychain Temporária e Configurar Permissões
+      - name: Criar Keychain Temporária
         run: |
           KEYCHAIN_PATH=$HOME/Library/Keychains/build.keychain-db
           security create-keychain -p "" $KEYCHAIN_PATH
@@ -50,12 +50,12 @@ jobs:
           </dict>
           EOF
 
-      - name: Instalar e Integrar Dependências CocoaPods
+      - name: Instalar Dependências CocoaPods
         run: |
           pod repo update
           pod install --repo-update
 
-      - name: Compilar e Gerar Archive (Modo Distribuição)
+      - name: Compilar e Gerar Archive
         run: |
           xcodebuild archive \
                      -workspace "Moda Acessível.xcworkspace" \
@@ -65,7 +65,8 @@ jobs:
                      -archivePath $PWD/build/ModaAcessivel.xcarchive \
                      DEVELOPMENT_TEAM=W5399G3VHK \
                      CODE_SIGN_STYLE=Automatic \
-                     CODE_SIGN_IDENTITY="Apple Distribution" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGN_IDENTITY="" \
                      -allowProvisioningUpdates \
                      -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
                      -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
