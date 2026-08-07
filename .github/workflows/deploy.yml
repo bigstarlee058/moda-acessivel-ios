@@ -19,7 +19,7 @@ jobs:
         with:
           xcode-version: 'latest-stable'
 
-      - name: Instalar Chave API do App Store Connect
+      - name: Configurar Chave API do App Store Connect
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
           echo "${{ secrets.APP_STORE_PRIVATE_KEY }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
@@ -37,7 +37,6 @@ jobs:
             -archivePath build/ModaAcessivel.xcarchive \
             CODE_SIGN_STYLE=Automatic \
             DEVELOPMENT_TEAM=W5399G3VHK \
-            PROVISIONING_PROFILE_SPECIFIER="" \
             -allowProvisioningUpdates \
             -authenticationKeyID ${{ secrets.APP_STORE_KEY_ID }} \
             -authenticationKeyIssuerID ${{ secrets.APP_STORE_ISSUER_ID }} \
