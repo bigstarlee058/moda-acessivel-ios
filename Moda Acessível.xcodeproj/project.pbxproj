@@ -20,6 +20,8 @@
 		CDC0FE292388222C002C8D56 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC0FE252388222B002C8D56 /* Main.storyboard */; };
 		CDC0FE2A2388222C002C8D56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC0FE272388222B002C8D56 /* LaunchScreen.storyboard */; };
 		E1E260C850014D6B34B487B0 /* Pods_ModaAcessível.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9D7FFB2FBE6EEBCA807B6A /* Pods_ModaAcessível.framework */; };
+		FC3B58C6302BEA820085832D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC3B58C5302BEA820085832D /* FirebaseCore */; };
+		FC3B58C8302BEA820085832D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FC3B58C7302BEA820085832D /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC3B58C8302BEA820085832D /* FirebaseMessaging in Frameworks */,
+				FC3B58C6302BEA820085832D /* FirebaseCore in Frameworks */,
 				E1E260C850014D6B34B487B0 /* Pods_ModaAcessível.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,6 +144,9 @@
 				Base,
 			);
 			mainGroup = CD89F880237E9D9200C436A1;
+			packageReferences = (
+				FC3B58C4302BEA810085832D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = CD89F880237E9D9200C436A1;
 			projectDirPath = "";
 			projectRoot = "";
@@ -449,6 +456,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC3B58C4302BEA810085832D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.17.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC3B58C5302BEA820085832D /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC3B58C4302BEA810085832D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		FC3B58C7302BEA820085832D /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC3B58C4302BEA810085832D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CD89F881237E9D9200C436A1 /* Project object */;
 }
