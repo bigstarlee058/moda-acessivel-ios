@@ -328,7 +328,6 @@
 		};
 		CD89F89E237E9D9300C436A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BEE8E5C625AE96C07F8AADED /* Pods-Moda Acessível.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = NO;
@@ -359,7 +358,6 @@
 		};
 		CD89F89F237E9D9300C436A1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4C1C2162A8048FDF52B2A9D0 /* Pods-Moda Acessível.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = NO;
