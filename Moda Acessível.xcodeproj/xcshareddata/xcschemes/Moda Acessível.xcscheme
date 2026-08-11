@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CD89F888237E9D9200C436A1"
-               BuildableName = "ModaAcessível.app"
-               BlueprintName = "Moda Acessível"
-               ReferencedContainer = "container:Moda Acessível.xcodeproj">
+               BuildableName = "ModaAcessi&#x301;vel.app"
+               BlueprintName = "Moda Acess&#xed;vel"
+               ReferencedContainer = "container:Moda Acessi&#x301;vel.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CD89F888237E9D9200C436A1"
-            BuildableName = "ModaAcessível.app"
-            BlueprintName = "Moda Acessível"
-            ReferencedContainer = "container:Moda Acessível.xcodeproj">
+            BuildableName = "ModaAcessi&#x301;vel.app"
+            BlueprintName = "Moda Acess&#xed;vel"
+            ReferencedContainer = "container:Moda Acessi&#x301;vel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CD89F888237E9D9200C436A1"
-            BuildableName = "ModaAcessível.app"
-            BlueprintName = "Moda Acessível"
-            ReferencedContainer = "container:Moda Acessível.xcodeproj">
+            BuildableName = "ModaAcessi&#x301;vel.app"
+            BlueprintName = "Moda Acess&#xed;vel"
+            ReferencedContainer = "container:Moda Acessi&#x301;vel.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
