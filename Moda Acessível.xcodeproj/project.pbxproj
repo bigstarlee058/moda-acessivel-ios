@@ -334,7 +334,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Moda Acessível/Entitlements/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W5399G3VHK;
 				INFOPLIST_FILE = "Moda Acessível/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -342,7 +342,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
 				PRODUCT_NAME = "ModaAcessível";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -364,7 +364,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Moda Acessível/Entitlements/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = W5399G3VHK;
 				INFOPLIST_FILE = "Moda Acessível/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -372,7 +372,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
 				PRODUCT_NAME = "ModaAcessível";
 				PROVISIONING_PROFILE_SPECIFIER = "";
