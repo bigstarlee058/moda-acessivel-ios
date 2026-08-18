@@ -21,9 +21,6 @@
 		CDC0FE2A2388222C002C8D56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDC0FE272388222B002C8D56 /* LaunchScreen.storyboard */; };
 		FC3B58C6302BEA820085832D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC3B58C5302BEA820085832D /* FirebaseCore */; };
 		FC3B58C8302BEA820085832D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = FC3B58C7302BEA820085832D /* FirebaseMessaging */; };
-		FC8CF4B9303392E0007AA62F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8CF4B8303392E0007AA62F /* Security.framework */; };
-		FC8CF4BB30339307007AA62F /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8CF4BA30339307007AA62F /* SystemConfiguration.framework */; };
-		FC8CF4BD3033931A007AA62F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8CF4BC3033931A007AA62F /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,9 +41,6 @@
 		BEE8E5C625AE96C07F8AADED /* Pods-Moda Acessível.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Moda Acessível.debug.xcconfig"; path = "Target Support Files/Pods-Moda Acessível/Pods-Moda Acessível.debug.xcconfig"; sourceTree = "<group>"; };
 		CDC0FE262388222B002C8D56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Moda Acessível/Base.lproj/Main.storyboard"; sourceTree = "<group>"; };
 		CDC0FE282388222B002C8D56 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Moda Acessível/Base.lproj/LaunchScreen.storyboard"; sourceTree = "<group>"; };
-		FC8CF4B8303392E0007AA62F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		FC8CF4BA30339307007AA62F /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		FC8CF4BC3033931A007AA62F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,9 +48,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC8CF4BD3033931A007AA62F /* WebKit.framework in Frameworks */,
-				FC8CF4BB30339307007AA62F /* SystemConfiguration.framework in Frameworks */,
-				FC8CF4B9303392E0007AA62F /* Security.framework in Frameworks */,
 				FC3B58C8302BEA820085832D /* FirebaseMessaging in Frameworks */,
 				FC3B58C6302BEA820085832D /* FirebaseCore in Frameworks */,
 			);
@@ -77,9 +68,6 @@
 		90E46E861CB86F5FAF46BED9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FC8CF4BC3033931A007AA62F /* WebKit.framework */,
-				FC8CF4BA30339307007AA62F /* SystemConfiguration.framework */,
-				FC8CF4B8303392E0007AA62F /* Security.framework */,
 				BE9D7FFB2FBE6EEBCA807B6A /* Pods_ModaAcessível.framework */,
 			);
 			name = Frameworks;
@@ -275,7 +263,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel.twa;
+				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -336,7 +324,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel.twa;
+				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -354,11 +342,9 @@
 				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "Moda Acessível/Entitlements/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 47;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5399G3VHK;
+				DEVELOPMENT_TEAM = W5399G3VHK;
 				INFOPLIST_FILE = "Moda Acessível/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -366,15 +352,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.1;
-<<<<<<< Updated upstream
-				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel.twa;
-=======
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
->>>>>>> Stashed changes
 				PRODUCT_NAME = "ModaAcessível";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Moda App Store Profile";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -392,11 +372,9 @@
 				CLANG_ENABLE_MODULES = NO;
 				CODE_SIGN_ENTITLEMENTS = "Moda Acessível/Entitlements/Entitlements.plist";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 47;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = W5399G3VHK;
+				DEVELOPMENT_TEAM = W5399G3VHK;
 				INFOPLIST_FILE = "Moda Acessível/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -404,15 +382,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.1;
-<<<<<<< Updated upstream
-				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel.twa;
-=======
-				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = app.madaacessivel;
->>>>>>> Stashed changes
 				PRODUCT_NAME = "ModaAcessível";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Moda App Store Profile";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
